@@ -20,5 +20,7 @@ namespace DataAccess.Entities
         public int DirectorId { get; set; }
 
         public Director Director { get; set; }
+
+        public List <MovieGenre> MoviesGenres { get; set; }
     }
 }
