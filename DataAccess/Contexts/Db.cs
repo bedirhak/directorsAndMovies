@@ -15,8 +15,12 @@ namespace DataAccess.Contexts
         public DbSet<Genre> Genres { get; set; }
         public DbSet<MovieGenre> MovieGenres { get; set; }
 
+		public DbSet<User> Users { get; set; } // Users table
 
-        public Db(DbContextOptions options) : base(options)
+		public DbSet<Role> Roles { get; set; } // Roles table
+
+
+		public Db(DbContextOptions options) : base(options)
         {
         }
 

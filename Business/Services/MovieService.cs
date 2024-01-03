@@ -105,9 +105,6 @@ namespace Business.Services
 			}
 			_db.MovieGenres.RemoveRange(existingEntity.MoviesGenres); // ilişkiliyi sil
 
-
-			// Tüm alanları kontrol et, herhangi bir değişiklik varsa güncelle
-
 			existingEntity.Name = model.Name.Trim();
 			existingEntity.ReleaseYear = model.ReleaseYear;
 			existingEntity.ImdbRank = model.ImdbRank;
