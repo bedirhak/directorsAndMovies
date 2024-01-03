@@ -1,13 +1,9 @@
 ﻿#nullable disable
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Business.Models;
+using Business.Services;
+using DataAccess.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using DataAccess.Contexts;
-using DataAccess.Entities;
 
 //Generated from Custom Template.
 namespace MVC.Controllers
@@ -16,23 +12,26 @@ namespace MVC.Controllers
     {
         // TODO: Add service injections here
         private readonly IGenreService _genreService;
+        private readonly IMovieService _movieService;
 
-        public GenresController(IGenreService genreService)
+        public GenresController(IGenreService genreService, IMovieService movieService)
         {
             _genreService = genreService;
+            _movieService = movieService;
         }
 
         // GET: Genres
         public IActionResult Index()
         {
-            List<GenreModel> genreList = new List<GenreModel>(); // TODO: Add get list service logic here
+            List<GenreModel> genreList = _genreService.GetList();
+
             return View(genreList);
         }
 
         // GET: Genres/Details/5
         public IActionResult Details(int id)
         {
-            GenreModel genre = null; // TODO: Add get item service logic here
+            GenreModel genre = _genreService.Query().SingleOrDefault(s => s.Id == id);
             if (genre == null)
             {
                 return NotFound();
@@ -44,6 +43,7 @@ namespace MVC.Controllers
         public IActionResult Create()
         {
             // TODO: Add get related items service logic here to set ViewData if necessary and update null parameter in SelectList with these items
+            ViewData["Name"] = new SelectList(_genreService.Query().ToList(), "Id", "Name");
             return View();
         }
 
@@ -57,16 +57,25 @@ namespace MVC.Controllers
             if (ModelState.IsValid)
             {
                 // TODO: Add insert service logic here
-                return RedirectToAction(nameof(Index));
+                bool result = _genreService.Add(genre);
+                // TODO: Add insert service logic here
+                if (result)
+                {
+                    TempData["Message"] = "Genre added successfully.";
+                    return RedirectToAction(nameof(Index));
+                }
+                ModelState.AddModelError("", "Genre couldn't be added!");
             }
             // TODO: Add get related items service logic here to set ViewData if necessary and update null parameter in SelectList with these items
+            ViewData["Name"] = new SelectList(_genreService.Query().ToList(), "Id", "Name");
             return View(genre);
         }
 
         // GET: Genres/Edit/5
+        // GET: Movies/Edit/5
         public IActionResult Edit(int id)
         {
-            GenreModel genre = null; // TODO: Add get item service logic here
+            GenreModel genre = _genreService.Query().SingleOrDefault(s => s.Id == id); // TODO: Add get item service logic here
             if (genre == null)
             {
                 return NotFound();
@@ -75,7 +84,7 @@ namespace MVC.Controllers
             return View(genre);
         }
 
-        // POST: Genres/Edit
+        // POST: Movies/Edit
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -85,16 +94,23 @@ namespace MVC.Controllers
             if (ModelState.IsValid)
             {
                 // TODO: Add update service logic here
-                return RedirectToAction(nameof(Index));
+                bool result = _genreService.Update(genre);
+                if (result)
+                {
+                    TempData["Message"] = "Genre updated successfully.";
+                    return RedirectToAction(nameof(Index));
+                }
+                ModelState.AddModelError("", "Genre couldn't be updated!");
             }
             // TODO: Add get related items service logic here to set ViewData if necessary and update null parameter in SelectList with these items
             return View(genre);
         }
 
-        // GET: Genres/Delete/5
+        // GET: Genre/Delete/5
         public IActionResult Delete(int id)
         {
-            GenreModel genre = null; // TODO: Add get item service logic here
+
+            GenreModel genre = _genreService.Query().SingleOrDefault(s => s.Id == id); // TODO: Add get item service logic here
             if (genre == null)
             {
                 return NotFound();
@@ -102,13 +118,15 @@ namespace MVC.Controllers
             return View(genre);
         }
 
-        // POST: Genres/Delete
+        // POST: Movies/Delete
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
             // TODO: Add delete service logic here
+            _genreService.Delete(id);
+            TempData["Message"] = "Genre deleted successfully.";
             return RedirectToAction(nameof(Index));
         }
-	}
+    }
 }

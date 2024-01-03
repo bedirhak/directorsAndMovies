@@ -12,12 +12,14 @@ namespace MVC.Controllers
         // TODO: Add service injections here
         private readonly IMovieService _movieService;
         private readonly IDirectorService _directorService;
+        private readonly IGenreService _genreService;
 
-        public MoviesController(IMovieService movieService, IDirectorService directorService)
+		public MoviesController(IMovieService movieService, IDirectorService directorService, IGenreService genreService)
         {
             _movieService = movieService;
             _directorService = directorService;
-        }
+            _genreService = genreService;
+		}
 
         //get movies
         public IActionResult Index()
@@ -42,7 +44,8 @@ namespace MVC.Controllers
         {
             // TODO: Add get related items service logic here to set ViewData if necessary and update null parameter in SelectList with these items
             ViewData["DirectorId"] = new SelectList(_directorService.Query().ToList(), "Id", "FullName");
-            return View();
+			ViewData["GenreId"] = new SelectList(_genreService.Query().ToList(), "Id", "Name");
+			return View();
         }
 
         // POST: Movies/Create
@@ -66,7 +69,8 @@ namespace MVC.Controllers
             }
             // TODO: Add get related items service logic here to set ViewData if necessary and update null parameter in SelectList with these items
             ViewData["DirectorId"] = new SelectList(_directorService.Query().ToList(), "Id", "FullName");
-            return View(movie);
+			ViewData["GenreId"] = new SelectList(_genreService.Query().ToList(), "Id", "Name");
+			return View(movie);
         }
 
         // GET: Movies/Edit/5
@@ -79,7 +83,9 @@ namespace MVC.Controllers
             }
             // TODO: Add get related items service logic here to set ViewData if necessary and update null parameter in SelectList with these items
             ViewData["DirectorId"] = new SelectList(_directorService.Query().ToList(), "Id", "FullName");
-            return View(movie);
+			ViewData["GenreId"] = new SelectList(_genreService.Query().ToList(), "Id", "Name");
+
+			return View(movie);
         }
 
         // POST: Movies/Edit

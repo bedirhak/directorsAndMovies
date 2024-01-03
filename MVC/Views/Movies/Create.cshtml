@@ -45,6 +45,18 @@
 					<span asp-validation-for="DirectorId" class="text-danger"></span>
 				</div>
             </div>
+			 <div class="row mb-3">
+				<label asp-for="GenreIds" class="col-2 col-form-label">Genres Of Movie</label>
+				<div class="col-5">
+					<select asp-for="GenreIds" multiple class="form-select" asp-items="ViewBag.GenreId">
+
+					</select>
+					<span asp-validation-for="GenreIds" class="text-danger"></span>
+				</div>
+            </div>
+
+
+
             <div class="row mb-3">
 				<div class="offset-2 col-5">
 					<input type="submit" value="Save" class="btn btn-primary" />

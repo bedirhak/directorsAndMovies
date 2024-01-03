@@ -26,5 +26,12 @@ namespace Business.Models
 
         [DisplayName("Director Name")]
         public string DirectorOutput { get; set; }
-    }
+
+
+
+		[DisplayName("Genres")]
+		public List <int> GenreIds { get; set; }
+
+
+	}
 }
