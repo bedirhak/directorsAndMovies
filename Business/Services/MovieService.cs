@@ -44,7 +44,7 @@ namespace Business.Services
 		//Burası okey
 		public bool Delete(int id)
 		{
-			Movie entity = _db.Movies.Include(m => m.MoviesGenres).SingleOrDefault(s => s.Id == id);
+			Movie entity = _db.Movies.Include(gid=>gid.MoviesGenres).SingleOrDefault(s => s.Id == id);
 			if (entity is null)
 				return false;
 			_db.MovieGenres.RemoveRange(entity.MoviesGenres); // 
@@ -88,7 +88,6 @@ namespace Business.Services
 		//    return true;
 		//}
 
-
 		public bool Update(MovieModel model)
 		{
 			if (_db.Movies.Any(m => m.Name.ToUpper() == model.Name.ToUpper().Trim() && m.Id != model.Id))
@@ -116,7 +115,6 @@ namespace Business.Services
 			_db.SaveChanges();
 			return true;
 		}
-
 
 	}
 }
